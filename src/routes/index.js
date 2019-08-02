@@ -1,5 +1,4 @@
-import student from './student';
-import teacher from './teacher';
-import auth from './auth';
+import users from './users';
+import portal from './portal';
 
-export default { student, teacher, auth };
+export default { users, portal };

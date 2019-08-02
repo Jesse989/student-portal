@@ -4,13 +4,34 @@ import { app } from '../../../../src/server.js';
 const expect = chai.expect;
 chai.use(chaiHttp);
 
-describe('PUT /students', function() {
+describe('PUT /users', function() {
+  it('fails with wrong creds', function(done) {
+    chai
+      .request(app)
+      .put('/users/Student0')
+      .type('application/x-www-form-urlencoded')
+      .send({
+        username: 'wrong',
+        password: 'wrong',
+        newUsername: 'Student00'
+      })
+      .end((err, res) => {
+        expect(err).to.be.null;
+        expect(res).to.have.status(401);
+        done();
+      });
+  });
+
   it('indicate success', function(done) {
     chai
       .request(app)
-      .put('/students/Student2')
+      .put('/users/Student0')
       .type('application/x-www-form-urlencoded')
-      .send({ username: 'EditedStudent' })
+      .send({
+        username: 'Teacher0',
+        password: 'passwordT0',
+        newUsername: 'Student00'
+      })
       .end((err, res) => {
         expect(err).to.be.null;
         expect(res).to.have.status(200);
@@ -22,12 +43,14 @@ describe('PUT /students', function() {
   it('changes can be verified with a GET', function(done) {
     chai
       .request(app)
-      .get('/students/EditedStudent')
+      .get('/users/Student00')
       .type('application/x-www-form-urlencoded')
+      .send({ username: 'Teacher0', password: 'passwordT0' })
       .end(function(err, res) {
         expect(err).to.be.null;
         expect(res).to.have.status(200);
-        expect(res.body.result.username).to.equal('EditedStudent');
+        expect(res.body.result.username).to.equal('Student00');
+        expect(res.body.result.role).to.equal('student');
         done();
       });
   });
@@ -35,9 +58,13 @@ describe('PUT /students', function() {
   it('fails when attempting to add duplicate username', function(done) {
     chai
       .request(app)
-      .post('/students')
+      .put('/users/Student00')
       .type('application/x-www-form-urlencoded')
-      .send({ username: 'NewStudent', password: 'password' })
+      .send({
+        username: 'Teacher0',
+        password: 'passwordT0',
+        newUsername: 'Teacher0'
+      })
       .end(function(err, res) {
         expect(err).to.be.null;
         expect(res).to.have.status(505);

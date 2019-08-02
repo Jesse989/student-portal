@@ -1,3 +1,3 @@
-import { createTeachersWithStudents } from './createTeachersWithStudents';
+import { createUsers } from './createUsers';
 
-export { createTeachersWithStudents };
+export { createUsers };

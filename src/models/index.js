@@ -14,8 +14,7 @@ export const sequelize = new Sequelize(
 );
 
 const models = {
-  Teacher: sequelize.import('./teacher.js'),
-  Student: sequelize.import('./student.js')
+  User: sequelize.import('./user.js')
 };
 
 Object.keys(models).forEach(key => {
