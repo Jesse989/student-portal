@@ -3,6 +3,12 @@ import bcrypt from 'bcrypt';
 
 export const createUsers = async () => {
   await models.User.create({
+    username: 'Admin0',
+    password: bcrypt.hashSync('passwordA0', 12),
+    role: 'admin'
+  });
+
+  await models.User.create({
     username: 'Teacher0',
     password: bcrypt.hashSync('passwordT0', 12),
     role: 'teacher'

@@ -4,7 +4,9 @@ import passport from 'passport';
 import bcrypt from 'bcrypt';
 
 const router = Router();
-
+const isAdmin = (req, res) => {
+  return req.user && req.user.role === 'admin';
+};
 router.get('/logout', async (req, res) => {
   req.logout();
   res.send({ success: true, message: 'logged out success' });
@@ -86,6 +88,9 @@ router.post('/', async (req, res) => {
 });
 
 router.delete('/:username', async (req, res) => {
+  if (!isAdmin(req, res)) {
+    res.send({ success: false, message: 'only admins' });
+  }
   try {
     // remove by name
     const result = await models.User.destroy({
